@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja DIVA'S</title>
+    <style>
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: monospace;
+        }
+
+        body,
+        html {
+            width: 100%;
+            min-height: 100vh;
+            background-color: #ffffff;
+            color: rgb(8, 8, 8);
+            overflow-x: hidden;
+        }
+
+        input {
+            background-color: #070707;
+            border: 0;
+            outline: 0;
+            text-decoration: none;
+            border-bottom: solid 3px white;
+            padding: 10px;
+            margin: 0 -1rem;
+            margin-top: 1rem;
+        }
+
+        input::placeholder {
+            color: rgb(247, 244, 244);
+        }
+
+        #flexNav {
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        i {
+            margin: 0 1rem;
+            font-size: 25px;
+            cursor: pointer;
+        }
+
+        header {
+            text-align: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        h2 {
+            margin: 3rem 0;
+            font-size: 69px;
+        }
+
+        img {
+            margin: 1rem 0;
+            width: 75%;
+            max-width: 500px; 
+            height: auto;
+            cursor: pointer; 
+            transition: transform 0.3s ease-in-out;
+        }
+
+        img:hover {
+            transform: scale(1.05); 
+        }
+
+        h5 {
+            text-align: center;
+        }
+
+        .small-images {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .small-images div {
+            text-align: center;
+            position: relative;
+        }
+
+        .small-images img {
+            width: 100px; 
+            cursor: pointer;  
+            margin-bottom: 0.5rem;
+            transition: transform 0.3s ease-in-out; 
+        }
+
+        .small-images img:hover {
+            transform: scale(1.1); 
+        }
+
+        .price {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .modal {
+            display: none; 
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8); 
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            max-width: 80%;
+            max-height: 80%;
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+        }
+
+        #sideMenu {
+            width: 250px;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: -250px; 
+            background-color: #111;
+            padding-top: 60px;
+            transition: 0.3s;
+            z-index: 1001;
+        }
+
+        #sideMenu a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 22px;
+            color: white;
+            display: block;
+            transition: 0.3s;
+        }
+
+        #sideMenu a:hover {
+            background-color: #575757;
+        }
+
+        #sideMenu .closeBtn {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 36px;
+            cursor: pointer;
+        }
+
+        #menuOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+        }
+        .arrow-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #f0f0f0;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .nav-button {
+            background-color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .nav-button:hover {
+            background-color: #e0e0e0;
+        }
+
+        .product-carousel {
+            display: flex;
+            overflow: hidden;
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        .product-slide {
+            flex: 0 0 100%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        .product-item {
+            text-align: center;
+        }
+
+        .product-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-item .price {
+            font-weight: bold;
+        }
+        .auth-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .auth-modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .auth-close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .auth-close:hover,
+        .auth-close:focus {
+            color: #000000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .auth-form input {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .auth-form button {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: rgb(187, 28, 28);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .auth-form button:hover {
+            background-color: #45a049;
+        }
+
+        .auth-switch {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .auth-switch a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+
+        .auth-switch a:hover {
+            text-decoration: underline;
+        }
+        footer {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 20px 0;
+            margin-top: 30px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-section {
+            margin: 10px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 5px;
+        }
+
+        .footer-section ul li a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .payment-methods img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .app-stores img {
+            height: 40px;
+            margin-right: 10px;
+        }
+    </style>
+    </style>
+    </style>
+</head>
+
+<body>
+    <div id="authModal" class="auth-modal">
+        <div class="auth-modal-content">
+            <span class="auth-close">&times;</span>
+            <div id="loginForm" class="auth-form">
+                <h2>Login</h2>
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Senha" required>
+                <button type="submit">Entrar</button>
+                <div class="auth-switch">
+                    Não tem uma conta? <a href="#" id="showRegister">Registre-se</a>
+                </div>
+            </div>
+            <div id="registerForm" class="auth-form" style="display:none;">
+                <h2>Registro</h2>
+                <input type="text" placeholder="Nome" required>
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Senha" required>
+                <input type="password" placeholder="Confirmar Senha" required>
+                <button type="submit">Registrar</button>
+                <div class="auth-switch">
+                    Já tem uma conta? <a href="#" id="showLogin">Faça login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="flexNav">
+        <i class="fa-solid fa-bars" id="menuBtn"></i>
+        <i class="fa-solid fa-user"></i>
+        <i class="fa-solid fa-heart"></i>
+        <i class="fa-solid fa-bookmark"></i>
+    </div>
+
+    <div id="sideMenu">
+        <a href="javascript:void(0)" class="closeBtn" id="closeMenu">&times;</a>
+        <a href="#">Entrar</a>
+        <a href="#">Produtos</a>
+        <a href="#">Sobre Nós</a>
+        <a href="#">Contato</a>
+    </div>
+
+    <div id="menuOverlay"></div>
+
+    <header>
+        <h2>DIVA'S</h2>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1rem;">
+            <input type="text" placeholder="O que você procura">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+        <img src="https://static.vecteezy.com/ti/vetor-gratis/p3/9352946-anuncios-de-produtos-de-cosmeticos-ou-cuidados-com-a-pele-com-banner-de-garrafa-para-produtos-de-beleza-design-de-de-fundo-rosa-e-folha-de-efeito-de-luz-brilhante-vetor.jpg"
+            alt="Main Product Image">
+    </header>
+    <div id="arrowNav" class="arrow-nav">
+        <button id="prevButton" class="nav-button"><i class="fas fa-chevron-left"></i></button>
+        <div class="product-carousel">
+            <div class="product-slide">
+            </div>
+        </div>
+        <button id="nextButton" class="nav-button"><i class="fas fa-chevron-right"></i></button>
+    </div>
+
+    <main>
+        <h5></h5>
+    </main>
+
+    <div class="modal" id="modal">
+        <span class="close" id="closeModal">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Encontre Uma Loja DIVA'S</h3>
+                <ul>
+                    <li><a href="#">Cadastre-se para receber novidades</a></li>
+                    <li><a href="#">Cartão Presente</a></li>
+                    <li><a href="#">Mapa do Site</a></li>
+                    <li><a href="#">DIVA'S Journal</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Ajuda</h3>
+                <ul>
+                    <li><a href="#">Dúvidas Gerais</a></li>
+                    <li><a href="#">Encontre seu Tamanho</a></li>
+                    <li><a href="#">Entregas</a></li>
+                    <li><a href="#">Pedidos</a></li>
+                    <li><a href="#">Devoluções</a></li>
+                    <li><a href="#">Pagamentos</a></li>
+                    <li><a href="#">Produtos</a></li>
+                    <li><a href="#">Corporativo</a></li>
+                    <li><a href="#">Fale Conosco</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Sobre a DIVA'S</h3>
+                <ul>
+                    <li><a href="#">Propósito</a></li>
+                    <li><a href="#">Sustentabilidade</a></li>
+                    <li><a href="#">Sobre a DIVA'S, Inc.</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Redes sociais</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+                <h3>Formas de pagamento</h3>
+                <div class="payment-methods">
+                    <img src="https://cdn-icons-png.flaticon.com/512/349/349228.png" alt="Mastercard">
+                    <img src="https://cdn-icons-png.flaticon.com/512/349/349221.png" alt="Visa">
+                    <img src="https://cdn-icons-png.flaticon.com/512/349/349230.png" alt="American Express">
+                    <img src="https://cdn-icons-png.flaticon.com/512/349/349234.png" alt="Elo">
+                    <img src="https://cdn-icons-png.flaticon.com/512/6100/6100268.png" alt="PIX">
+                </div>
+                <div class="app-stores">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://kit.fontawesome.com/bdf57aa9a9.js" crossorigin="anonymous"></script>
+    <script>
+    
+    const products = [
+        { image: "https://i.pinimg.com/564x/c2/57/a1/c257a16ccacafea04ef9e6efbf28b7bd.jpg", price: "R$ 249,90" },
+        { image: "https://i.pinimg.com/564x/5b/9f/7f/5b9f7fa9bac7e4c717f6b96e70a00a91.jpg", price: "R$ 129,90" },
+        { image: "https://i.pinimg.com/564x/19/49/27/19492729b85041d7094f5131ecad3fa3.jpg", price: "R$ 79,90" },
+        { image: "https://i.pinimg.com/236x/4b/ed/c8/4bedc8d6e9b8376bd16b2dfed06ad406.jpg", price: "R$ 149,90" },
+        { image: "https://i.pinimg.com/736x/e0/21/c2/e021c2c13fee6afba0b10e2f8736adbe.jpg", price: "R$ 149,90" },
+        { image: "https://i.pinimg.com/236x/05/19/e2/0519e22cc7faf4833a065622f04b5c28.jpg", price: "R$ 309,90" },
+    ];
+
+
+        const productSlide = document.querySelector('.product-slide');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        let currentIndex = 0;
+        const productsPerSlide = 3;
+        function createProductElement(product) {
+            const productItem = document.createElement('div');
+            productItem.className = 'product-item';
+            productItem.innerHTML = `
+                <img src="${product.image}" alt="Produto">
+                <div class="price">${product.price}</div>
+            `;
+            return productItem;
+        }
+        function updateCarousel() {
+            productSlide.innerHTML = '';
+            for (let i = 0; i < productsPerSlide; i++) {
+                const index = (currentIndex + i) % products.length;
+                productSlide.appendChild(createProductElement(products[index]));
+            }
+        }
+
+        updateCarousel();
+
+        prevButton.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + products.length) % products.length;
+            updateCarousel();
+        });
+
+        nextButton.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % products.length;
+            updateCarousel();
+        });
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        const modal = document.getElementById('modal');
+        const modalImg = document.getElementById('modalImage');
+        const closeModal = document.getElementById('closeModal');
+
+        thumbnails.forEach(thumbnail => {
+            thumbnail.addEventListener('click', () => {
+                modal.style.display = 'flex';
+                modalImg.src = thumbnail.src;
+            });
+        });
+
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        const menuBtn = document.getElementById('menuBtn');
+        const sideMenu = document.getElementById('sideMenu');
+        const closeMenu = document.getElementById('closeMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+
+        menuBtn.addEventListener('click', () => {
+            sideMenu.style.left = '0';
+            menuOverlay.style.display = 'block';
+        });
+
+        closeMenu.addEventListener('click', () => {
+            sideMenu.style.left = '-250px';
+            menuOverlay.style.display = 'none';
+        });
+
+        menuOverlay.addEventListener('click', () => {
+            sideMenu.style.left = '-250px';
+            menuOverlay.style.display = 'none';
+        });
+    </script>
+    <script src="https://kit.fontawesome.com/bdf57aa9a9.js" crossorigin="anonymous"></script>
+    <script>
+      
+        const authModal = document.getElementById('authModal');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const showRegisterLink = document.getElementById('showRegister');
+        const showLoginLink = document.getElementById('showLogin');
+        const authCloseBtn = document.querySelector('.auth-close');
+
+        function openAuthModal() {
+            authModal.style.display = 'block';
+            loginForm.style.display = 'block';
+            registerForm.style.display = 'none';
+        }
+
+        document.querySelector('#sideMenu a[href="#"]').addEventListener('click', (e) => {
+            e.preventDefault();
+            openAuthModal();
+            sideMenu.style.left = '-250px';
+            menuOverlay.style.display = 'none';
+        });
+
+        showRegisterLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'block';
+        });
+
+        showLoginLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            registerForm.style.display = 'none';
+            loginForm.style.display = 'block';
+        });
+
+        authCloseBtn.addEventListener('click', () => {
+            authModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target == authModal) {
+                authModal.style.display = 'none';
+            }
+        });
+
+        document.querySelectorAll('.auth-form').forEach(form => {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert
+            });
+        });
+    </script>
+</body>
+</html>
